@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitsugar/screens/login_screen.dart';
+import 'package:fitsugar/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -28,101 +29,9 @@ class ProfileScreen extends StatelessWidget {
                 color: Colors.black87,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
 
-            // Profile photo and name section
-            Center(
-              child: Column(
-                children: [
-                  // Profile photo with edit button
-                  Stack(
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[200],
-                          border: Border.all(
-                            color: Colors.white,
-                            width: 4,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(60),
-                          child: user?.photoURL != null
-                              ? Image.network(
-                            user!.photoURL!,
-                            fit: BoxFit.cover,
-                          )
-                              : Icon(
-                            Icons.person,
-                            size: 60,
-                            color: Colors.grey[400],
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          width: 36,
-                          height: 36,
-                          decoration: BoxDecoration(
-                            color: primaryColor,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white,
-                              width: 2,
-                            ),
-                          ),
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: const Icon(
-                              Icons.edit,
-                              size: 18,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              // Add functionality to change profile photo
-                            },
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  // Display name
-                  Text(
-                    user?.displayName ?? 'Add Your Name',
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  // Email
-                  Text(
-                    user?.email ?? 'No Email Available',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Personal Information card
+            // User information card
             Card(
               elevation: 2,
               shape: RoundedRectangleBorder(
@@ -137,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Personal Information',
+                          'Account Information',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -151,7 +60,12 @@ class ProfileScreen extends StatelessWidget {
                             size: 20,
                           ),
                           onPressed: () {
-                            // Add functionality to edit profile
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const EditProfileScreen(),
+                              ),
+                            );
                           },
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
@@ -160,15 +74,25 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    _buildInfoRow(Icons.cake_outlined, 'Age', '28'),
-                    const Divider(height: 24),
-                    _buildInfoRow(Icons.height, 'Height', '5\'9"'),
-                    const Divider(height: 24),
-                    _buildInfoRow(Icons.monitor_weight_outlined, 'Weight', '154 lbs'),
-                    const Divider(height: 24),
-                    _buildInfoRow(Icons.local_fire_department_outlined, 'Daily Calorie Goal', '2,100'),
-                    const Divider(height: 24),
-                    _buildInfoRow(Icons.medical_information_outlined, 'Sugar Limit', '25g'),
+                    // User name
+                    Text(
+                      user?.displayName ?? 'Add Your Name',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+
+                    // User email
+                    Text(
+                      user?.email ?? 'No Email Available',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -225,7 +149,7 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 40),
 
             // Logout button
             SizedBox(
@@ -259,40 +183,10 @@ class ProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 20,
-          color: Colors.grey[600],
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 16,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.grey[800],
-          ),
-        ),
-      ],
     );
   }
 

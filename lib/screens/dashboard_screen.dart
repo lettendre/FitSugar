@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Import for SVG icons
 import 'history_screen.dart';
 import 'add_data_screen.dart';
-import 'settings_screen.dart';
 import 'profile_screen.dart';
 import 'package:fitsugar/widgets/bottom_navbar.dart';
 
