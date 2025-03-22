@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192.82 53.22">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #19a7bd;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4 {
+        stroke-width: 0px;
+      }
+
+      .cls-2, .cls-5 {
+        fill: #e43358;
+      }
+
+      .cls-3 {
+        fill: #f5792f;
+      }
+
+      .cls-4, .cls-6 {
+        fill: #fcb436;
+      }
+
+      .cls-6 {
+        font-family: Poppins-Bold, Poppins;
+        font-weight: 700;
+      }
+
+      .cls-6, .cls-5 {
+        font-size: 31.05px;
+      }
+
+      .cls-5 {
+        font-family: Poppins-ExtraLightItalic, Poppins;
+        font-style: italic;
+        font-weight: 200;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g>
+      <g>
+        <circle class="cls-4" cx="5.57" cy="36.25" r="5.57"/>
+        <rect class="cls-4" x="9.07" y="29.32" width="8.25" height="3.88" transform="translate(-14.98 12.35) rotate(-33.24)"/>
+        <g>
+          <circle class="cls-1" cx="5.57" cy="16.97" r="5.57"/>
+          <rect class="cls-1" x="11.42" y="17.82" width="3.88" height="8.25" transform="translate(-12.34 21.77) rotate(-58.28)"/>
+        </g>
+        <g>
+          <circle class="cls-3" cx="20.8" cy="5.57" r="5.57"/>
+          <rect class="cls-3" x="18.86" y="10.26" width="3.88" height="12.13"/>
+        </g>
+        <g>
+          <circle class="cls-2" cx="36.03" cy="36.25" r="5.57"/>
+          <circle class="cls-2" cx="36.03" cy="16.97" r="5.57"/>
+          <rect class="cls-2" x="26.47" y="27.13" width="3.88" height="8.25" transform="translate(-13.31 37.88) rotate(-56.76)"/>
+          <rect class="cls-2" x="24.12" y="20.01" width="8.25" height="3.88" transform="translate(-7.32 18.13) rotate(-31.72)"/>
+        </g>
+        <circle class="cls-4" cx="20.8" cy="26.24" r="5.57"/>
+      </g>
+      <g>
+        <text class="cls-6" transform="translate(61.96 34.41)"><tspan x="0" y="0">Fit</tspan></text>
+        <text class="cls-5" transform="translate(102.98 34.41)"><tspan x="0" y="0">Sugar</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

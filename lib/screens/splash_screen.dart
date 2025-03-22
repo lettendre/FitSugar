@@ -1,0 +1,90 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:fitsugar/services/auth_service.dart';
+import 'package:fitsugar/screens/login_screen.dart';
+import 'package:fitsugar/screens/dashboard_screen.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  bool _isLoading = true;
+  Widget? _nextScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    // Start loading after widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuthAndNavigate();
+    });
+  }
+
+  // Check authentication and prepare navigation
+  Future<void> _checkAuthAndNavigate() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    // Wait for 2 seconds to show splash screen
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Get current user
+    final User? user = await authService.authStateChanges.first;
+
+    setState(() {
+      _nextScreen = user != null ? const DashboardScreen() : const LoginScreen();
+      _isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 800),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        // Create a fade transition
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+      child: _isLoading
+          ? _buildSplashScreen()
+          : _nextScreen,
+    );
+  }
+
+  // Build the splash screen
+  Widget _buildSplashScreen() {
+    return Scaffold(
+      key: const ValueKey<String>('splashScreen'),
+      backgroundColor: const Color(0xFFE83A5F),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Image(
+              image: AssetImage('logo_white.png'),
+              width: 80,
+              height: 80,
+            ),
+            // Uncomment if you want to show app name
+            // SizedBox(height: 16),
+            // Text(
+            //   'FitSugar',
+            //   style: TextStyle(
+            //     color: Colors.white,
+            //     fontSize: 24,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+}
