@@ -17,12 +17,13 @@ class _AddDataScreenState extends State<AddDataScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _productInfo = "No product information available.";
   bool _isLoading = false;
+  bool _isSaving = false;
 
   // Store the found product for saving
   String? _currentProductName;
   double? _currentSugarAmount;
 
-  // Function to search for product by name
+  // Function to search for product by name and auto-save
   void _searchProduct() async {
     final name = _searchController.text.trim();
     if (name.isEmpty) {
@@ -52,11 +53,16 @@ class _AddDataScreenState extends State<AddDataScreen> {
           sugarAmount = double.tryParse(sugarValue);
         }
 
+        final parsedSugarAmount = sugarAmount ?? 0.0;
+
         setState(() {
           _currentProductName = productName;
-          _currentSugarAmount = sugarAmount ?? 0.0;
-          _productInfo = 'Product: $productName\nSugar: ${sugarAmount?.toStringAsFixed(1) ?? 'unknown'}g';
+          _currentSugarAmount = parsedSugarAmount;
+          _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g\nAutomatically saved to history';
         });
+
+        // Auto-save the product information
+        await _saveToHistory(productName, parsedSugarAmount);
       } else {
         setState(() {
           _productInfo = 'No products found.';
@@ -101,11 +107,16 @@ class _AddDataScreenState extends State<AddDataScreen> {
             sugarAmount = double.tryParse(sugarValue);
           }
 
+          final parsedSugarAmount = sugarAmount ?? 0.0;
+
           setState(() {
             _currentProductName = productName;
-            _currentSugarAmount = sugarAmount ?? 0.0;
-            _productInfo = 'Product: $productName\nSugar: ${sugarAmount?.toStringAsFixed(1) ?? 'unknown'}g';
+            _currentSugarAmount = parsedSugarAmount;
+            _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
           });
+
+          // Auto-save the product information
+          await _saveToHistory(productName, parsedSugarAmount);
         } else {
           setState(() {
             _productInfo = 'Product not found.';
@@ -127,24 +138,17 @@ class _AddDataScreenState extends State<AddDataScreen> {
     }
   }
 
-  // Save the current product to history
-  void _saveToHistory() async {
-    if (_currentProductName == null || _currentSugarAmount == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No product data to save')),
-      );
-      return;
-    }
+  // Save the product to history
+  Future<void> _saveToHistory(String productName, double sugarAmount) async {
+    setState(() {
+      _isSaving = true;
+    });
 
     try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      await _firestoreService.addFoodEntry(_currentProductName!, _currentSugarAmount!);
+      await _firestoreService.addFoodEntry(productName, sugarAmount);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Food entry saved to history')),
+        const SnackBar(content: Text('Entry Saved')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -152,7 +156,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
       );
     } finally {
       setState(() {
-        _isLoading = false;
+        _isSaving = false;
       });
     }
   }
@@ -302,30 +306,17 @@ class _AddDataScreenState extends State<AddDataScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
+                      _isSaving
+                          ? Center(
+
+                      )
+                          : Text(
                         _productInfo,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey.shade800,
                         ),
                       ),
-                      const Spacer(),
-                      if (_currentProductName != null && _currentSugarAmount != null)
-                        Center(
-                          child: ElevatedButton.icon(
-                            onPressed: _isLoading ? null : _saveToHistory,
-                            icon: const Icon(Icons.save),
-                            label: const Text('Save to History'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: brandColor,
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 15),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ),

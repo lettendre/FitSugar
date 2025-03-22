@@ -47,6 +47,37 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return entries;
   }
 
+  // Method to show delete confirmation dialog
+  Future<bool> _confirmDelete(FoodEntry entry) async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to remove this entry?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('CANCEL'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('DELETE'),
+            ),
+          ],
+        );
+      },
+    ) ?? false;
+  }
+
+  // Method to delete entry and show confirmation
+  void _deleteEntry(FoodEntry entry) {
+    _firestoreService.deleteFoodEntry(entry.id);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${entry.foodName} removed')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -215,31 +246,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         ),
                         direction: DismissDirection.endToStart,
                         confirmDismiss: (direction) async {
-                          return await showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirm Delete'),
-                                content: const Text('Are you sure you want to remove this entry?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text('CANCEL'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(true),
-                                    child: const Text('DELETE'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                          return await _confirmDelete(entry);
                         },
                         onDismissed: (direction) {
-                          _firestoreService.deleteFoodEntry(entry.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${entry.foodName} removed')),
-                          );
+                          _deleteEntry(entry);
                         },
                         child: ListTile(
                           title: Text(
@@ -250,19 +260,32 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             dateFormat.format(entry.timestamp),
                             style: TextStyle(color: Colors.grey.shade600),
                           ),
-                          trailing: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: _getSugarLevelColor(entry.sugarAmount),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Text(
-                              '${entry.sugarAmount.toStringAsFixed(1)}g',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: _getSugarLevelColor(entry.sugarAmount),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Text(
+                                  '${entry.sugarAmount.toStringAsFixed(1)}g',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
-                            ),
+                              IconButton(
+                                icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                onPressed: () async {
+                                  if (await _confirmDelete(entry)) {
+                                    _deleteEntry(entry);
+                                  }
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -317,31 +340,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ),
                                 direction: DismissDirection.endToStart,
                                 confirmDismiss: (direction) async {
-                                  return await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Confirm Delete'),
-                                        content: const Text('Are you sure you want to remove this entry?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.of(context).pop(false),
-                                            child: const Text('CANCEL'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () => Navigator.of(context).pop(true),
-                                            child: const Text('DELETE'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                  return await _confirmDelete(entry);
                                 },
                                 onDismissed: (direction) {
-                                  _firestoreService.deleteFoodEntry(entry.id);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('${entry.foodName} removed')),
-                                  );
+                                  _deleteEntry(entry);
                                 },
                                 child: ListTile(
                                   title: Text(
@@ -352,19 +354,32 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     'Added at ${DateFormat('h:mm a').format(entry.timestamp)}',
                                     style: TextStyle(color: Colors.grey.shade600),
                                   ),
-                                  trailing: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                    decoration: BoxDecoration(
-                                      color: _getSugarLevelColor(entry.sugarAmount),
-                                      borderRadius: BorderRadius.circular(16),
-                                    ),
-                                    child: Text(
-                                      '${entry.sugarAmount.toStringAsFixed(1)}g',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                        decoration: BoxDecoration(
+                                          color: _getSugarLevelColor(entry.sugarAmount),
+                                          borderRadius: BorderRadius.circular(16),
+                                        ),
+                                        child: Text(
+                                          '${entry.sugarAmount.toStringAsFixed(1)}g',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                       ),
-                                    ),
+                                      IconButton(
+                                        icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                        onPressed: () async {
+                                          if (await _confirmDelete(entry)) {
+                                            _deleteEntry(entry);
+                                          }
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
                               );
