@@ -75,7 +75,7 @@ class _DashboardViewState extends State<DashboardView> {
 
   // Get appropriate icon based on food name
   IconData _getFoodIcon(String foodName) {
-      return Icons.restaurant;
+    return Icons.restaurant;
   }
 
   // Format timestamp to a readable format
@@ -117,41 +117,37 @@ class _DashboardViewState extends State<DashboardView> {
 
 
     return SafeArea(
-
-        child: Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 20),
 
-
-
             // Weekly Sugar Intake Chart
             Text(
               'Weekly Sugar Intake',
               style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
                 color: textColor,
               ),
             ),
 
             const SizedBox(height: 12),
 
-            // Weekly Sugar Chart
+            // Weekly Sugar Chart - UPDATED WITH NEW DECORATION
             Container(
               height: 220,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: cardBorderColor),
+                borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.1),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: Offset(0, 2),
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
@@ -206,22 +202,30 @@ class _DashboardViewState extends State<DashboardView> {
 
             const SizedBox(height: 24),
 
-            // Add Food Entry Button - Call to Action
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                onTap: () {
-                  if (context.findAncestorStateOfType<_DashboardScreenState>() != null) {
-                    context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(1); // Index 1 is Add Data/Search screen
-                  }
-                },
-                borderRadius: BorderRadius.circular(12),
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: primaryColor,
-                    borderRadius: BorderRadius.circular(12),
+            // Add Food Entry Button - Call to Action - UPDATED WITH NEW DECORATION
+            Container(
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
                   ),
-                  child: Container(
+                ],
+              ),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    if (context.findAncestorStateOfType<_DashboardScreenState>() != null) {
+                      context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(1); // Index 1 is Add Data/Search screen
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(15),
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -252,8 +256,8 @@ class _DashboardViewState extends State<DashboardView> {
                 Text(
                   'Recent Entries',
                   style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
                     color: textColor,
                   ),
                 ),
@@ -293,7 +297,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             const SizedBox(height: 16),
 
-            // Recent Food Entries - Show only the last 3 entries
+            // Recent Food Entries - Show only the last 3 entries - UPDATED WITH NEW DECORATION
             Expanded(
               child: StreamBuilder<List<FoodEntry>>(
                 stream: _getRecentFoodEntries(),
@@ -350,8 +354,15 @@ class _DashboardViewState extends State<DashboardView> {
                         return Container(
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: cardBorderColor),
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.2),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
                           child: ListTile(
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

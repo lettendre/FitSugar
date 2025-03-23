@@ -16,6 +16,7 @@ class HistoryScreen extends StatefulWidget {
 class _HistoryScreenState extends State<HistoryScreen> {
   final FirestoreService _firestoreService = FirestoreService();
   SortOption _currentSortOption = SortOption.dateNewest;
+  final Color cardBorderColor = Colors.grey.shade300;
 
   String getSortOptionText(SortOption option) {
     switch (option) {
@@ -81,11 +82,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Define the primary color to match login screen
+    final Color primaryColor = Color(0xFFE94262);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Sugar History',
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
             color: Colors.black87,
           ),
@@ -93,7 +97,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         actions: [
           // Sort button in AppBar
           PopupMenuButton<SortOption>(
-            icon: const Icon(Icons.sort),
+            icon: Icon(Icons.sort, color: primaryColor),
             tooltip: 'Sort',
             onSelected: (SortOption option) {
               setState(() {
@@ -174,17 +178,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
         children: [
           // Current sort indicator
           Container(
-            color: Colors.grey[100],
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                Icon(Icons.sort, size: 16, color: Colors.grey[600]),
+                Icon(Icons.sort, size: 16, color: Colors.grey[800]),
                 const SizedBox(width: 8),
                 Text(
                   'Sorted by: ${getSortOptionText(_currentSortOption)}',
                   style: TextStyle(
                     color: Colors.grey[800],
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ],
@@ -238,61 +241,86 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 if (_currentSortOption == SortOption.sugarHighest ||
                     _currentSortOption == SortOption.sugarLowest) {
                   return ListView.builder(
+                    padding: const EdgeInsets.all(16),
                     itemCount: entries.length,
                     itemBuilder: (context, index) {
                       final entry = entries[index];
                       final dateFormat = DateFormat('MMM d, yyyy • h:mm a');
 
-                      return Dismissible(
-                        key: Key(entry.id),
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.only(right: 16),
-                          child: const Icon(Icons.delete, color: Colors.white),
-                        ),
-                        direction: DismissDirection.endToStart,
-                        confirmDismiss: (direction) async {
-                          return await _confirmDelete(entry);
-                        },
-                        onDismissed: (direction) {
-                          _deleteEntry(entry);
-                        },
-                        child: ListTile(
-                          title: Text(
-                            entry.foodName,
-                            style: const TextStyle(fontWeight: FontWeight.w500),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: Dismissible(
+                          key: Key(entry.id),
+                          background: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            alignment: Alignment.centerRight,
+                            padding: const EdgeInsets.only(right: 16),
+                            child: const Icon(Icons.delete, color: Colors.white),
                           ),
-                          subtitle: Text(
-                            dateFormat.format(entry.timestamp),
-                            style: TextStyle(color: Colors.grey.shade600),
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: _getSugarLevelColor(entry.sugarAmount),
-                                  borderRadius: BorderRadius.circular(16),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await _confirmDelete(entry);
+                          },
+                          onDismissed: (direction) {
+                            _deleteEntry(entry);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: cardBorderColor),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
                                 ),
-                                child: Text(
-                                  '${entry.sugarAmount.toStringAsFixed(1)}g',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                              ],
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              child: ListTile(
+                                title: Text(
+                                  entry.foodName,
+                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                ),
+                                subtitle: Text(
+                                  dateFormat.format(entry.timestamp),
+                                  style: TextStyle(color: Colors.grey.shade600),
+                                ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                      decoration: BoxDecoration(
+                                        color: _getSugarLevelColor(entry.sugarAmount),
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Text(
+                                        '${entry.sugarAmount.toStringAsFixed(1)}g',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                      onPressed: () async {
+                                        if (await _confirmDelete(entry)) {
+                                          _deleteEntry(entry);
+                                        }
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
-                              IconButton(
-                                icon: const Icon(Icons.delete_outline, color: Colors.red),
-                                onPressed: () async {
-                                  if (await _confirmDelete(entry)) {
-                                    _deleteEntry(entry);
-                                  }
-                                },
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       );
@@ -312,6 +340,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   }
 
                   return ListView.builder(
+                    padding: const EdgeInsets.all(16),
                     itemCount: entriesByDate.length,
                     itemBuilder: (context, index) {
                       final date = entriesByDate.keys.elementAt(index);
@@ -321,7 +350,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                            padding: const EdgeInsets.fromLTRB(8, 16, 16, 8),
                             child: Text(
                               date,
                               style: TextStyle(
@@ -337,56 +366,80 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             itemCount: dateEntries.length,
                             itemBuilder: (context, entryIndex) {
                               final entry = dateEntries[entryIndex];
-                              return Dismissible(
-                                key: Key(entry.id),
-                                background: Container(
-                                  color: Colors.red,
-                                  alignment: Alignment.centerRight,
-                                  padding: const EdgeInsets.only(right: 16),
-                                  child: const Icon(Icons.delete, color: Colors.white),
-                                ),
-                                direction: DismissDirection.endToStart,
-                                confirmDismiss: (direction) async {
-                                  return await _confirmDelete(entry);
-                                },
-                                onDismissed: (direction) {
-                                  _deleteEntry(entry);
-                                },
-                                child: ListTile(
-                                  title: Text(
-                                    entry.foodName,
-                                    style: const TextStyle(fontWeight: FontWeight.w500),
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 12),
+                                child: Dismissible(
+                                  key: Key(entry.id),
+                                  background: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    alignment: Alignment.centerRight,
+                                    padding: const EdgeInsets.only(right: 16),
+                                    child: const Icon(Icons.delete, color: Colors.white),
                                   ),
-                                  subtitle: Text(
-                                    'Added at ${DateFormat('h:mm a').format(entry.timestamp)}',
-                                    style: TextStyle(color: Colors.grey.shade600),
-                                  ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                        decoration: BoxDecoration(
-                                          color: _getSugarLevelColor(entry.sugarAmount),
-                                          borderRadius: BorderRadius.circular(16),
+                                  direction: DismissDirection.endToStart,
+                                  confirmDismiss: (direction) async {
+                                    return await _confirmDelete(entry);
+                                  },
+                                  onDismissed: (direction) {
+                                    _deleteEntry(entry);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: cardBorderColor),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
                                         ),
-                                        child: Text(
-                                          '${entry.sugarAmount.toStringAsFixed(1)}g',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                      child: ListTile(
+                                        title: Text(
+                                          entry.foodName,
+                                          style: const TextStyle(fontWeight: FontWeight.w500),
+                                        ),
+                                        subtitle: Text(
+                                          'Added at ${DateFormat('h:mm a').format(entry.timestamp)}',
+                                          style: TextStyle(color: Colors.grey.shade600),
+                                        ),
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                              decoration: BoxDecoration(
+                                                color: _getSugarLevelColor(entry.sugarAmount),
+                                                borderRadius: BorderRadius.circular(16),
+                                              ),
+                                              child: Text(
+                                                '${entry.sugarAmount.toStringAsFixed(1)}g',
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: const Icon(Icons.delete_outline, color: Colors.red),
+                                              onPressed: () async {
+                                                if (await _confirmDelete(entry)) {
+                                                  _deleteEntry(entry);
+                                                }
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: const Icon(Icons.delete_outline, color: Colors.red),
-                                        onPressed: () async {
-                                          if (await _confirmDelete(entry)) {
-                                            _deleteEntry(entry);
-                                          }
-                                        },
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               );

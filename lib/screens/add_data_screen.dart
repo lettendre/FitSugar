@@ -14,7 +14,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
   final OpenFoodFactsService _foodFactsService = OpenFoodFactsService();
   final FirestoreService _firestoreService = FirestoreService();
   final TextEditingController _searchController = TextEditingController();
-  String _productInfo = "No product information available.";
+  String _productInfo = "Search for a product to track sugar.";
   bool _isLoading = false;
   bool _isSaving = false;
 
@@ -180,12 +180,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
       // ),
       body: Container(
         decoration: BoxDecoration(
-          // Light gradient background
+          // Updated background gradient to #FEF7FF
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              brandColor.withOpacity(0.05),
+              const Color(0xFFFEF7FF),
               Colors.white,
             ],
           ),
@@ -227,7 +227,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                                 borderSide: BorderSide(color: brandColor, width: 2),
                               ),
                               labelStyle: TextStyle(color: Colors.grey.shade600),
-                              prefixIcon: Icon(Icons.search, color: brandColor),
+                              // Removed the prefixIcon from here
                             ),
                           ),
                         ),
@@ -237,7 +237,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: brandColor,
                             foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            minimumSize: const Size(57, 57), // Match TextField height
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -251,7 +252,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
-                              : const Text('Add'),
+                              : const Icon(Icons.search, size: 28),
                         ),
                       ],
                     ),
@@ -259,7 +260,8 @@ class _AddDataScreenState extends State<AddDataScreen> {
                     ElevatedButton.icon(
                       onPressed: _isLoading ? null : _scanBarcode,
                       icon: const Icon(Icons.qr_code_scanner),
-                      label: const Text('Scan Barcode'),
+                      label: const Text('Scan Barcode',
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: brandColor,
                         foregroundColor: Colors.white,
@@ -299,7 +301,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                       Text(
                         'Product Information',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                           color: brandColor,
                         ),
@@ -313,7 +315,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                         _productInfo,
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey.shade800,
+                          color: Colors.black,
                         ),
                       ),
                     ],

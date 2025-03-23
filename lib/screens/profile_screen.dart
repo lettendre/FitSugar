@@ -11,7 +11,6 @@ class ProfileScreen extends StatelessWidget {
     final User? user = FirebaseAuth.instance.currentUser;
     // Define the primary color to match login screen
     final Color primaryColor = Color(0xFFE94262);
-    final Color accentColor = Colors.cyan;
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -24,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
             const Text(
               'My Profile',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
@@ -32,10 +31,18 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 40),
 
             // User information card
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -56,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                         IconButton(
                           icon: Icon(
                             Icons.edit,
-                            color: accentColor,
+                            color: Color(0xFFE94262),
                             size: 20,
                           ),
                           onPressed: () {
