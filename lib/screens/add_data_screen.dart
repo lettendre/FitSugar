@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:fitsugar/services/open_food_facts_service.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
-import 'package:fitsugar/widgets/appbar.dart';
 
 class AddDataScreen extends StatefulWidget {
   const AddDataScreen({Key? key}) : super(key: key);

@@ -2,28 +2,32 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fitsugar/services/auth_service.dart';
+import 'package:fitsugar/services/connectivity_service.dart';
 import 'package:fitsugar/screens/splash_screen.dart';
 import 'package:fitsugar/screens/dashboard_screen.dart';
 import 'package:fitsugar/screens/history_screen.dart';
 import 'package:fitsugar/screens/add_data_screen.dart';
 import 'package:fitsugar/screens/profile_screen.dart';
+import 'package:fitsugar/screens/no_wifi_screen.dart';
+import 'package:fitsugar/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyBSThrUudr9vUlE-prCcFev5SdoSLVRWk8",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "fitsugar-9e5b9",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "1:157115216541:android:a8af671b0a35b154565a74",
-    ),
-  );
+
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    print('Firebase initialization error: $e');
+    // Continue app execution even if Firebase fails to initialize
+  }
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
+        ChangeNotifierProvider(create: (_) => ConnectivityService()),
       ],
       child: const MyApp(),
     ),
@@ -40,10 +44,17 @@ class MyApp extends StatelessWidget {
       title: 'FitSugar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        // Add dark theme support (optional)
         brightness: Brightness.light,
       ),
-      home: const SplashScreen(),
+      home: Consumer<ConnectivityService>(
+        builder: (context, connectivity, _) {
+          if (connectivity.isConnected) {
+            return const SplashScreen();
+          } else {
+            return const NoWifiScreen();
+          }
+        },
+      ),
       routes: {
         '/dashboard': (context) => const MainScreen(),
       },
@@ -65,7 +76,7 @@ class _MainScreenState extends State<MainScreen> {
     const DashboardScreen(),
     const AddDataScreen(),
     const HistoryScreen(),
-    const ProfileScreen(), // Make sure this file exists
+    const ProfileScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -76,6 +87,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Check for connectivity
+    final connectivity = Provider.of<ConnectivityService>(context);
+
+    // If not connected, show the no wifi screen
+    if (!connectivity.isConnected) {
+      return const NoWifiScreen();
+    }
+
+    // Otherwise show the normal screen
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

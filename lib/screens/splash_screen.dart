@@ -2,8 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fitsugar/services/auth_service.dart';
+import 'package:fitsugar/services/connectivity_service.dart';
 import 'package:fitsugar/screens/login_screen.dart';
 import 'package:fitsugar/screens/dashboard_screen.dart';
+import 'package:fitsugar/screens/no_wifi_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -28,21 +30,43 @@ class _SplashScreenState extends State<SplashScreen> {
   // Check authentication and prepare navigation
   Future<void> _checkAuthAndNavigate() async {
     final authService = Provider.of<AuthService>(context, listen: false);
+    final connectivityService = Provider.of<ConnectivityService>(context, listen: false);
+
+    // Check connectivity first
+    await connectivityService.checkConnectivity();
 
     // Wait for 2 seconds to show splash screen
     await Future.delayed(const Duration(seconds: 2));
 
-    // Get current user
-    final User? user = await authService.authStateChanges.first;
+    if (!connectivityService.isConnected) {
+      setState(() {
+        _nextScreen = const NoWifiScreen();
+        _isLoading = false;
+      });
+      return;
+    }
 
-    setState(() {
-      _nextScreen = user != null ? const DashboardScreen() : const LoginScreen();
-      _isLoading = false;
-    });
+    // Get current user
+    try {
+      final User? user = await authService.authStateChanges.first;
+      setState(() {
+        _nextScreen = user != null ? const DashboardScreen() : const LoginScreen();
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Error during auth check: $e');
+      setState(() {
+        _nextScreen = const LoginScreen();
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Listen for connectivity changes
+    final connectivity = Provider.of<ConnectivityService>(context);
+
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 800),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -54,6 +78,8 @@ class _SplashScreenState extends State<SplashScreen> {
       },
       child: _isLoading
           ? _buildSplashScreen()
+          : !connectivity.isConnected && _nextScreen != const NoWifiScreen()
+          ? const NoWifiScreen()
           : _nextScreen,
     );
   }
@@ -72,7 +98,7 @@ class _SplashScreenState extends State<SplashScreen> {
               width: 80,
               height: 80,
             ),
-            // Uncomment if you want to show app name
+            // You can uncomment below if you want to show app name
             // SizedBox(height: 16),
             // Text(
             //   'FitSugar',

@@ -1,11 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Add this import
 import 'package:fitsugar/services/auth_service.dart';
 import 'package:fitsugar/screens/dashboard_screen.dart';
 import 'package:fitsugar/screens/signup_screen.dart';
-import 'package:fitsugar/widgets/logo_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,6 +19,68 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _isPasswordVisible = false;
+  bool _rememberMe = false;
+
+  // Keys for shared preferences
+  static const String _keyRememberMe = 'remember_me';
+  static const String _keyEmail = 'email';
+  static const String _keyPassword = 'password';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  // Load saved credentials from SharedPreferences
+  Future<void> _loadSavedCredentials() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      // Get remember me flag
+      final rememberMe = prefs.getBool(_keyRememberMe) ?? false;
+
+      if (rememberMe) {
+        final email = prefs.getString(_keyEmail) ?? '';
+        final password = prefs.getString(_keyPassword) ?? '';
+
+        setState(() {
+          _emailController.text = email;
+          _passwordController.text = password;
+          _rememberMe = true;
+        });
+
+        print('Loaded credentials for: $email');
+      } else {
+        print('No saved credentials found or remember me is off');
+      }
+    } catch (e) {
+      print('Error loading credentials: $e');
+    }
+  }
+
+  // Save or clear credentials based on remember me setting
+  Future<void> _saveCredentials() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+
+      if (_rememberMe) {
+        // Save credentials
+        await prefs.setString(_keyEmail, _emailController.text.trim());
+        await prefs.setString(_keyPassword, _passwordController.text.trim());
+        await prefs.setBool(_keyRememberMe, true);
+        print('Saved credentials for: ${_emailController.text.trim()}');
+      } else {
+        // Clear credentials
+        await prefs.remove(_keyEmail);
+        await prefs.remove(_keyPassword);
+        await prefs.setBool(_keyRememberMe, false);
+        print('Cleared saved credentials');
+      }
+    } catch (e) {
+      print('Error saving credentials: $e');
+    }
+  }
 
   @override
   void dispose() {
@@ -34,6 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
+      // Save credentials if "Remember me" is checked
+      await _saveCredentials();
+
       final authService = Provider.of<AuthService>(context, listen: false);
       await authService.signInWithEmailPassword(
         _emailController.text.trim(),
@@ -199,26 +263,56 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
 
-                  // Forgot Password
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        // Add forgot password functionality
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size(50, 30),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  // Remember Me Checkbox and Forgot Password Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Remember Me
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _rememberMe,
+                            onChanged: (value) {
+                              setState(() {
+                                _rememberMe = value ?? false;
+                              });
+                              // Save preferences immediately when checkbox changes
+                              _saveCredentials();
+                            },
+                            activeColor: primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
+                          Text(
+                            'Remember Me',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade700,
+                            ),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        'Forgot Password',
-                        style: TextStyle(
-                          color: Colors.cyan,
-                          fontWeight: FontWeight.w500,
+
+                      // Forgot Password
+                      TextButton(
+                        onPressed: () {
+                          // Add forgot password functionality
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size(50, 30),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          'Forgot Password',
+                          style: TextStyle(
+                            color: Colors.cyan,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
 
                   const SizedBox(height: 30),
@@ -290,7 +384,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Create Account',
                           style: TextStyle(
                             color: Colors.cyan,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w500,
                             fontSize: 14,
                           ),
                         ),
