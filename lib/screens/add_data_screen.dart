@@ -173,12 +173,12 @@ class _AddDataScreenState extends State<AddDataScreen> {
     final brandColor = const Color(0xFFE83A5F);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Food', style: TextStyle(color: Colors.white)),
-        backgroundColor: brandColor,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Search Food', style: TextStyle(color: Colors.white)),
+      //   backgroundColor: brandColor,
+      //   elevation: 0,
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      // ),
       body: Container(
         decoration: BoxDecoration(
           // Light gradient background
@@ -252,25 +252,25 @@ class _AddDataScreenState extends State<AddDataScreen> {
                               valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           )
-                              : const Text('Search'),
+                              : const Text('Add'),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 20),
-                    ElevatedButton.icon(
-                      onPressed: _isLoading ? null : _scanBarcode,
-                      icon: const Icon(Icons.qr_code_scanner),
-                      label: const Text('Scan Barcode'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: brandColor,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(height: 20),
+                    // ElevatedButton.icon(
+                    //   onPressed: _isLoading ? null : _scanBarcode,
+                    //   icon: const Icon(Icons.qr_code_scanner),
+                    //   label: const Text('Scan Barcode'),
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: brandColor,
+                    //     foregroundColor: Colors.white,
+                    //     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+                    //     minimumSize: const Size(double.infinity, 50),
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

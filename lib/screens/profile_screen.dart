@@ -99,58 +99,6 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Preferences and settings card
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Column(
-                children: [
-                  _buildSettingsItem(
-                    context,
-                    Icons.notifications_outlined,
-                    'Notifications',
-                    'Customize your alerts',
-                    onTap: () {
-                      // Navigate to notifications settings
-                    },
-                  ),
-                  const Divider(height: 1, indent: 56),
-                  _buildSettingsItem(
-                    context,
-                    Icons.privacy_tip_outlined,
-                    'Privacy',
-                    'Manage your data',
-                    onTap: () {
-                      // Navigate to privacy settings
-                    },
-                  ),
-                  const Divider(height: 1, indent: 56),
-                  _buildSettingsItem(
-                    context,
-                    Icons.help_outline,
-                    'Help Center',
-                    'Get support',
-                    onTap: () {
-                      // Navigate to help center
-                    },
-                  ),
-                  const Divider(height: 1, indent: 56),
-                  _buildSettingsItem(
-                    context,
-                    Icons.info_outline,
-                    'About',
-                    'App information and legal',
-                    onTap: () {
-                      // Navigate to about page
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 40),
-
             // Logout button
             SizedBox(
               width: double.infinity,

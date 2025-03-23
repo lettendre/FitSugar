@@ -113,5 +113,20 @@ class FirestoreService {
       rethrow;
     }
   }
-}
 
+  Future<List<FoodEntry>> getFoodEntriesAsList() async {
+    try {
+      String userId = _userId;
+      final snapshot = await _getEntriesCollection(userId)
+          .orderBy('timestamp', descending: true)
+          .get();
+
+      return snapshot.docs.map((doc) =>
+          FoodEntry.fromJson(doc.data() as Map<String, dynamic>)
+      ).toList();
+    } catch (e) {
+      print('Error getting food entries: $e');
+      rethrow;
+    }
+  }
+}

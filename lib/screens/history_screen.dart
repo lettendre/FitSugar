@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:fitsugar/models/food_entry.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
 
+
 enum SortOption { dateNewest, dateOldest, sugarHighest, sugarLowest }
 
 class HistoryScreen extends StatefulWidget {
@@ -82,7 +83,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sugar History'),
+        title: const Text('Sugar History',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
         actions: [
           // Sort button in AppBar
           PopupMenuButton<SortOption>(
