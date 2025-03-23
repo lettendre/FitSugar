@@ -58,7 +58,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
         setState(() {
           _currentProductName = productName;
           _currentSugarAmount = parsedSugarAmount;
-          _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g\nAutomatically saved to history';
+          _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
         });
 
         // Auto-save the product information
@@ -79,7 +79,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
     }
   }
 
-  // Function to scan barcode and get product details
+  //Function to scan barcode and get product details
   void _scanBarcode() async {
     setState(() {
       _isLoading = true;
@@ -174,10 +174,10 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
     return Scaffold(
       // appBar: AppBar(
-      //   title: const Text('Search Food', style: TextStyle(color: Colors.white)),
-      //   backgroundColor: brandColor,
-      //   elevation: 0,
-      //   iconTheme: const IconThemeData(color: Colors.white),
+      // title: const Text('Search Food', style: TextStyle(color: Colors.white)),
+      // backgroundColor: brandColor,
+      // elevation: 0,
+      // iconTheme: const IconThemeData(color: Colors.white),
       // ),
       body: Container(
         decoration: BoxDecoration(
@@ -256,21 +256,21 @@ class _AddDataScreenState extends State<AddDataScreen> {
                         ),
                       ],
                     ),
-                    // const SizedBox(height: 20),
-                    // ElevatedButton.icon(
-                    //   onPressed: _isLoading ? null : _scanBarcode,
-                    //   icon: const Icon(Icons.qr_code_scanner),
-                    //   label: const Text('Scan Barcode'),
-                    //   style: ElevatedButton.styleFrom(
-                    //     backgroundColor: brandColor,
-                    //     foregroundColor: Colors.white,
-                    //     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
-                    //     minimumSize: const Size(double.infinity, 50),
-                    //     shape: RoundedRectangleBorder(
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //   ),
-                    // ),
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: _isLoading ? null : _scanBarcode,
+                      icon: const Icon(Icons.qr_code_scanner),
+                      label: const Text('Scan Barcode'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: brandColor,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

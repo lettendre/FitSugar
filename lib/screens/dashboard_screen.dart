@@ -250,7 +250,7 @@ class _DashboardViewState extends State<DashboardView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Today\'s Food Log',
+                  'Recent Entries',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
