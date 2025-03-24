@@ -1,6 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'history_screen.dart';
@@ -11,7 +9,7 @@ import 'package:fitsugar/models/food_entry.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -56,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  const DashboardView({super.key});
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -65,20 +63,14 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   final FirestoreService _firestoreService = FirestoreService();
 
-  // Get the most recent 3 food entries from Firestore
+  //recent 3 food entries from database
   Stream<List<FoodEntry>> _getRecentFoodEntries() {
     return _firestoreService.getFoodEntries().map((entries) {
-      // Take just the first 3 entries (they're already sorted by timestamp descending)
       return entries.take(3).toList();
     });
   }
 
-  // Get appropriate icon based on food name
-  IconData _getFoodIcon(String foodName) {
-    return Icons.restaurant;
-  }
-
-  // Format timestamp to a readable format
+  //format timestamp
   String _formatTimestamp(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);
@@ -94,7 +86,7 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-  // Get color based on sugar amount
+  //colour code sugar amount
   Color _getSugarLevelColor(double sugarAmount) {
     if (sugarAmount <= 5) {
       return Colors.green;
@@ -107,14 +99,15 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // Define the primary color to match login screen (pink color)
-    final Color primaryColor = Color(0xFFE94262);
-    final Color textColor = Colors.black87;
+    final Color primaryColor = Colors.pink;
+    final Color lightColor = const Color(0xFFFEF7FF);
+    final Color textColor = Colors.black;
     final Color cardBorderColor = Colors.grey.shade300;
-
+    final Color boxColor = Colors.white;
+    final Color shadowColor = Colors.grey.withOpacity(0.2);
+    final Color errorTextColor = Colors.grey.shade600;
 
     return SafeArea(
       child: Padding(
@@ -124,7 +117,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             const SizedBox(height: 20),
 
-            // Weekly Sugar Intake Chart
+            //sugar chart
             Text(
               'Weekly Sugar Intake',
               style: TextStyle(
@@ -140,11 +133,11 @@ class _DashboardViewState extends State<DashboardView> {
             Container(
               height: 220,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: boxColor,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: shadowColor,
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 2),
@@ -165,7 +158,7 @@ class _DashboardViewState extends State<DashboardView> {
                     return Center(
                       child: Text(
                         'Error loading data',
-                        style: TextStyle(color: Colors.grey.shade600),
+                        style: TextStyle(color: errorTextColor),
                       ),
                     );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -183,7 +176,7 @@ class _DashboardViewState extends State<DashboardView> {
                             'No data to display',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.grey.shade600,
+                              color: errorTextColor,
                             ),
                           ),
                         ],
@@ -191,10 +184,9 @@ class _DashboardViewState extends State<DashboardView> {
                     );
                   }
 
-                  // Process data for the chart
+                  //process data for the chart
                   final entries = snapshot.data!;
                   final weeklyData = _processWeeklyData(entries);
-
                   return _buildSugarIntakeChart(weeklyData, primaryColor);
                 },
               ),
@@ -202,14 +194,14 @@ class _DashboardViewState extends State<DashboardView> {
 
             const SizedBox(height: 24),
 
-            // Add Food Entry Button - Call to Action - UPDATED WITH NEW DECORATION
+            //CTA button - add food entry
             Container(
               decoration: BoxDecoration(
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: shadowColor,
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 2),
@@ -221,7 +213,7 @@ class _DashboardViewState extends State<DashboardView> {
                 child: InkWell(
                   onTap: () {
                     if (context.findAncestorStateOfType<_DashboardScreenState>() != null) {
-                      context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(1); // Index 1 is Add Data/Search screen
+                      context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(1);
                     }
                   },
                   borderRadius: BorderRadius.circular(15),
@@ -237,7 +229,7 @@ class _DashboardViewState extends State<DashboardView> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -249,7 +241,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             const SizedBox(height: 24),
 
-            // Daily Food Log Title
+            //recent entries section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -265,7 +257,7 @@ class _DashboardViewState extends State<DashboardView> {
                 TextButton(
                   onPressed: () {
                     if (context.findAncestorStateOfType<_DashboardScreenState>() != null) {
-                      context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(2); // Index 2 is the History screen
+                      context.findAncestorStateOfType<_DashboardScreenState>()!._onItemTapped(2);
                     }
                   },
                   style: TextButton.styleFrom(
@@ -280,7 +272,7 @@ class _DashboardViewState extends State<DashboardView> {
                         style: TextStyle(
                           color: primaryColor,
                           fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.normal,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -297,7 +289,7 @@ class _DashboardViewState extends State<DashboardView> {
 
             const SizedBox(height: 16),
 
-            // Recent Food Entries - Show only the last 3 entries - UPDATED WITH NEW DECORATION
+            //recent entries section
             Expanded(
               child: StreamBuilder<List<FoodEntry>>(
                 stream: _getRecentFoodEntries(),
@@ -312,7 +304,7 @@ class _DashboardViewState extends State<DashboardView> {
                     return Center(
                       child: Text(
                         'Error loading entries',
-                        style: TextStyle(color: Colors.grey.shade600),
+                        style: TextStyle(color: errorTextColor),
                       ),
                     );
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -330,7 +322,7 @@ class _DashboardViewState extends State<DashboardView> {
                             'No food entries yet',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.grey.shade600,
+                              color: errorTextColor,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -338,7 +330,7 @@ class _DashboardViewState extends State<DashboardView> {
                             'Add your first food item',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey.shade500,
+                              color: Colors.grey.shade400,
                             ),
                           ),
                         ],
@@ -357,7 +349,7 @@ class _DashboardViewState extends State<DashboardView> {
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
+                                color: shadowColor,
                                 spreadRadius: 2,
                                 blurRadius: 5,
                                 offset: const Offset(0, 2),
@@ -370,11 +362,11 @@ class _DashboardViewState extends State<DashboardView> {
                               width: 40,
                               height: 40,
                               decoration: BoxDecoration(
-                                color: primaryColor.withOpacity(0.1),
+                                color: lightColor,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Icon(
-                                _getFoodIcon(entry.foodName),
+                                Icons.restaurant,
                                 color: primaryColor,
                                 size: 22,
                               ),
@@ -382,7 +374,7 @@ class _DashboardViewState extends State<DashboardView> {
                             title: Text(
                               entry.foodName,
                               style: TextStyle(
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 color: textColor,
                               ),
@@ -390,10 +382,10 @@ class _DashboardViewState extends State<DashboardView> {
                             subtitle: Padding(
                               padding: const EdgeInsets.only(top: 6.0),
                               child: Text(
-                                '${_formatTimestamp(entry.timestamp)} • ',
+                                'Added at ${_formatTimestamp(entry.timestamp)}',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Colors.grey.shade600,
+                                  color: errorTextColor,
                                 ),
                               ),
                             ),
@@ -425,31 +417,30 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  // Process data for weekly sugar intake chart
+  //data processing for sugar chart
   List<Map<String, dynamic>> _processWeeklyData(List<FoodEntry> entries) {
     final now = DateTime.now();
     final weeklyData = <DateTime, double>{};
 
-    // Initialize last 7 days with 0 values
+    //initialise last 7 days with 0 values
     for (int i = 6; i >= 0; i--) {
       final date = DateTime(now.year, now.month, now.day).subtract(Duration(days: i));
       weeklyData[date] = 0;
     }
 
-    // Calculate total sugar intake for each day
+    //calculate total sugar intake for each day
     for (var entry in entries) {
       final entryDate = entry.timestamp;
-      // Normalize to start of day for proper comparison
       final normalizedDate = DateTime(entryDate.year, entryDate.month, entryDate.day);
       final diff = now.difference(normalizedDate).inDays;
 
-      // Only consider entries from the last 7 days
+      //take only last 7 days
       if (diff >= 0 && diff < 7) {
         weeklyData[normalizedDate] = (weeklyData[normalizedDate] ?? 0) + entry.sugarAmount;
       }
     }
 
-    // Convert map to list of maps for chart
+    //convert map to list of maps for chart
     return weeklyData.entries.map((e) => {
       'date': e.key,
       'amount': e.value,
@@ -457,9 +448,9 @@ class _DashboardViewState extends State<DashboardView> {
       ..sort((a, b) => (a['date'] as DateTime).compareTo(b['date'] as DateTime));
   }
 
-  // Build sugar intake chart
+  //build sugar intake chart
   Widget _buildSugarIntakeChart(List<Map<String, dynamic>> data, Color primaryColor) {
-    // Find max value for Y-axis scaling
+    //find max value for y-axis scaling
     final maxY = data.isEmpty ? 10.0 : data.map((e) => e['amount'] as double).reduce((a, b) => a > b ? a : b) + 5;
 
     return Padding(

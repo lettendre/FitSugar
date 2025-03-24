@@ -4,13 +4,14 @@ import 'package:fitsugar/screens/login_screen.dart';
 import 'package:fitsugar/screens/edit_profile_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final User? user = FirebaseAuth.instance.currentUser;
-    // Define the primary color to match login screen
-    final Color primaryColor = Color(0xFFE94262);
+    final Color primaryColor = Colors.pink;
+    final Color shadowColor = Colors.grey.withOpacity(0.2);
+    final Color errorTextColor = Colors.grey.shade600;
 
     return Padding(
       padding: const EdgeInsets.all(24.0),
@@ -19,25 +20,24 @@ class ProfileScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile header
             const Text(
               'My Profile',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 40),
 
-            // User information card
+            //user information card
             Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
+                    color: shadowColor,
                     spreadRadius: 2,
                     blurRadius: 5,
                     offset: const Offset(0, 2),
@@ -57,13 +57,13 @@ class ProfileScreen extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: Colors.black,
                           ),
                         ),
                         IconButton(
                           icon: Icon(
                             Icons.edit,
-                            color: Color(0xFFE94262),
+                            color: primaryColor,
                             size: 20,
                           ),
                           onPressed: () {
@@ -81,23 +81,21 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
-                    // User name
                     Text(
                       user?.displayName ?? 'Add Your Name',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
 
-                    // User email
                     Text(
                       user?.email ?? 'No Email Available',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.grey[600],
+                        color: errorTextColor,
                       ),
                     ),
                   ],
@@ -106,7 +104,6 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Logout button
             SizedBox(
               width: double.infinity,
               child: TextButton(
@@ -132,73 +129,13 @@ class ProfileScreen extends StatelessWidget {
                   'Log Out',
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     color: primaryColor,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSettingsItem(
-      BuildContext context,
-      IconData icon,
-      String title,
-      String subtitle, {
-        required VoidCallback onTap,
-      }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: Colors.grey[700],
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 16,
-              color: Colors.grey[400],
-            ),
           ],
         ),
       ),

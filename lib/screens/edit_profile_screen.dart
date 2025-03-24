@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -21,7 +21,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // Initialize controllers with current user data
+    //placeholders with current user data
     final user = FirebaseAuth.instance.currentUser;
     _nameController = TextEditingController(text: user?.displayName ?? '');
     _emailController = TextEditingController(text: user?.email ?? '');
@@ -44,22 +44,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        // Update display name if changed
+        //update display name if changed
         if (user.displayName != _nameController.text.trim()) {
           await user.updateDisplayName(_nameController.text.trim());
         }
 
-        // Update email if changed
+        //update email if changed
         if (user.email != _emailController.text.trim()) {
           await user.updateEmail(_emailController.text.trim());
         }
 
-        // Update password if provided
+        //update password if provided
         if (_passwordController.text.isNotEmpty) {
           await user.updatePassword(_passwordController.text);
         }
 
-        // Reload user to get updated info
+        //reload user to get updated info
         await user.reload();
 
         if (mounted) {
@@ -82,25 +82,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Match the app's brand color
-    final Color primaryColor = Color(0xFFE94262);
+    final Color primaryColor = Colors.pink;
+    final Color lightColor = Color(0xFFFEF7FF);
+    final Color shadowColor = Colors.grey.withOpacity(0.2);
+    final Color cardBorderColor = Colors.grey.shade300;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(
             'Edit Profile',
             style: TextStyle(
-              color: Colors.black87,
-              fontSize: 24,
+              color: Colors.black,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             )
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black87),
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
-        color: Color(0xFFFEF7FF),
+        color: lightColor,
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(24.0),
@@ -110,16 +112,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Spacer at the top
                     const SizedBox(height: 10),
 
-                    // Name Field
                     Text(
                       'Name',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -129,10 +129,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: shadowColor,
                             spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -146,11 +146,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -168,13 +168,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     const SizedBox(height: 24),
 
-                    // Email Field
                     Text(
                       'Email',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -184,10 +183,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: shadowColor,
                             spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -202,11 +201,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -217,6 +216,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           if (value == null || value.isEmpty) {
                             return 'Please enter your email';
                           }
+                          //form validation for email addresses
                           if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                             return 'Please enter a valid email';
                           }
@@ -232,8 +232,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       'New Password (leave blank to keep current)',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -243,10 +243,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: shadowColor,
                             spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -261,11 +261,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -299,8 +299,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       'Confirm New Password',
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -310,10 +310,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.withOpacity(0.1),
+                            color: shadowColor,
                             spreadRadius: 1,
-                            blurRadius: 3,
-                            offset: Offset(0, 1),
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -328,11 +328,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(color: Colors.grey.shade300),
+                            borderSide: BorderSide(color: cardBorderColor),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -366,24 +366,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
                     const SizedBox(height: 40),
 
-                    // Save Changes Button
+                    //save changes button
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
                         onTap: _isLoading ? null : _saveChanges,
                         borderRadius: BorderRadius.circular(12),
                         splashColor: Colors.black26,
-                        highlightColor: const Color(0xFFD03655), // Darker shade when pressed
+                        highlightColor: Colors.pinkAccent,
                         child: Ink(
                           decoration: BoxDecoration(
                             color: primaryColor,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                color: primaryColor.withOpacity(0.3),
-                                spreadRadius: 0,
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
+                                color: shadowColor,
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
                               ),
                             ],
                           ),
@@ -413,7 +413,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
 
-                    // Cancel Button
+                    //cancel button
                     const SizedBox(height: 16),
                     Material(
                       color: Colors.transparent,

@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Add this import
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fitsugar/services/auth_service.dart';
 import 'package:fitsugar/screens/dashboard_screen.dart';
 import 'package:fitsugar/screens/signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPasswordVisible = false;
   bool _rememberMe = false;
 
-  // Keys for shared preferences
+  //keys for shared preferences
   static const String _keyRememberMe = 'remember_me';
   static const String _keyEmail = 'email';
   static const String _keyPassword = 'password';
@@ -32,12 +32,12 @@ class _LoginScreenState extends State<LoginScreen> {
     _loadSavedCredentials();
   }
 
-  // Load saved credentials from SharedPreferences
+  //load saved credentials from SharedPreferences
   Future<void> _loadSavedCredentials() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
-      // Get remember me flag
+      //get remember me flag
       final rememberMe = prefs.getBool(_keyRememberMe) ?? false;
 
       if (rememberMe) {
@@ -59,19 +59,19 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Save or clear credentials based on remember me setting
+  //save or clear credentials based on remember me setting
   Future<void> _saveCredentials() async {
     try {
       final prefs = await SharedPreferences.getInstance();
 
       if (_rememberMe) {
-        // Save credentials
+        //set credentials
         await prefs.setString(_keyEmail, _emailController.text.trim());
         await prefs.setString(_keyPassword, _passwordController.text.trim());
         await prefs.setBool(_keyRememberMe, true);
         print('Saved credentials for: ${_emailController.text.trim()}');
       } else {
-        // Clear credentials
+        //clear credentials
         await prefs.remove(_keyEmail);
         await prefs.remove(_keyPassword);
         await prefs.setBool(_keyRememberMe, false);
@@ -95,7 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Save credentials if "Remember me" is checked
+      //set credentials if "remember me" is checked
       await _saveCredentials();
 
       final authService = Provider.of<AuthService>(context, listen: false);
@@ -128,8 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Define the primary color for the app (pink color from screenshot)
-    final Color primaryColor = Color(0xFFE94262);
+    final Color primaryColor = Colors.pink;
+    final Color cardBorderColor = Colors.grey.shade300;
 
     return Scaffold(
       body: SafeArea(
@@ -144,7 +144,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const SizedBox(height: 60),
 
-                  // Logo - Using the colorful logo from the screenshot
                   Center(
                     child: Column(
                       children: [
@@ -159,13 +158,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 40),
 
-                  // Email Field
                   Text(
                     'Email',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -180,21 +178,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
+                      //email validation
                       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
@@ -204,7 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Password Field
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -212,8 +210,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         'Password',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -230,15 +228,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey.shade400),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -263,11 +261,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
 
-                  // Remember Me Checkbox and Forgot Password Row
+                  //remember me / forgot password
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Remember Me
+                      //remember me
                       Row(
                         children: [
                           Checkbox(
@@ -276,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               setState(() {
                                 _rememberMe = value ?? false;
                               });
-                              // Save preferences immediately when checkbox changes
+                              //save preferences immediately when checkbox ticked
                               _saveCredentials();
                             },
                             activeColor: primaryColor,
@@ -294,10 +292,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
 
-                      // Forgot Password
+                      //forgot password
                       TextButton(
                         onPressed: () {
-                          // Add forgot password functionality
+                          //forgot password not implemented
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
@@ -308,7 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Forgot Password',
                           style: TextStyle(
                             color: Colors.cyan,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -317,14 +315,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 30),
 
-                  // Login Button with pressed effect
+                  //log in button
                   Material(
                     color: Colors.transparent,
                     child: InkWell(
                       onTap: _isLoading ? null : _login,
                       borderRadius: BorderRadius.circular(12),
                       splashColor: Colors.black26,
-                      highlightColor: Color(0xFFD03655), // Darker shade when pressed
+                      highlightColor: Colors.pinkAccent,
                       child: Ink(
                         decoration: BoxDecoration(
                           color: primaryColor,
@@ -347,7 +345,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 16,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -364,7 +362,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Don\'t have an account?',
                         style: TextStyle(
-                          color: Colors.black87,
+                          color: Colors.black,
                           fontSize: 14,
                         ),
                       ),
@@ -384,7 +382,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'Create Account',
                           style: TextStyle(
                             color: Colors.cyan,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
                         ),

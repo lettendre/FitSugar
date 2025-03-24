@@ -4,7 +4,7 @@ import 'package:fitsugar/services/open_food_facts_service.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
 
 class AddDataScreen extends StatefulWidget {
-  const AddDataScreen({Key? key}) : super(key: key);
+  const AddDataScreen({super.key});
 
   @override
   _AddDataScreenState createState() => _AddDataScreenState();
@@ -18,11 +18,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
   bool _isLoading = false;
   bool _isSaving = false;
 
-  // store the found product for saving
+  //store the found product for saving
   String? _currentProductName;
   double? _currentSugarAmount;
 
-  // function to search for product by name and auto-save
+  //function to search for product by name and auto save
   void _searchProduct() async {
     final name = _searchController.text.trim();
     if (name.isEmpty) {
@@ -38,11 +38,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
     try {
       final products = await _foodFactsService.searchProductsByName(name);
       if (products.isNotEmpty) {
-        // extract product name and sugar amount
+        //extract product name and sugar amount
         final productName = products[0]['product_name'] ?? 'Unknown Product';
         final sugarValue = products[0]['nutriments']?['sugars'];
 
-        // parse sugar amount, handle different data types
+        //parse sugar amount, handle different data types
         double? sugarAmount;
         if (sugarValue is int) {
           sugarAmount = sugarValue.toDouble();
@@ -60,7 +60,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
           _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
         });
 
-        // auto-save the product information
+        //auto save the product information
         await _saveToHistory(productName, parsedSugarAmount);
       } else {
         setState(() {
@@ -92,11 +92,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
         final productData = await _foodFactsService.getProductDataByBarcode(scanResult.rawContent);
 
         if (productData != null) {
-          // extract product name and sugar amount
+          //extract product name and sugar amount
           final productName = productData['product_name'] ?? 'Unknown Product';
           final sugarValue = productData['nutriments']?['sugars'];
 
-          // parse sugar amount, handle different data types
+          //parse sugar amount and handle different data types
           double? sugarAmount;
           if (sugarValue is int) {
             sugarAmount = sugarValue.toDouble();
@@ -114,7 +114,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
             _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
           });
 
-          // auto-save the product information
+          //auto save the product info
           await _saveToHistory(productName, parsedSugarAmount);
         } else {
           setState(() {
@@ -137,7 +137,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
     }
   }
 
-  // save the product to history
+  //automatically save the product to history
   Future<void> _saveToHistory(String productName, double sugarAmount) async {
     setState(() {
       _isSaving = true;
@@ -168,19 +168,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // brand color to match your splash screen
-    final brandColor = const Color(0xFFE83A5F);
+    final brandColor = Colors.pink;
 
     return Scaffold(
-      // appBar: AppBar(
-      // title: const Text('Search Food', style: TextStyle(color: Colors.white)),
-      // backgroundColor: brandColor,
-      // elevation: 0,
-      // iconTheme: const IconThemeData(color: Colors.white),
-      // ),
       body: Container(
         decoration: BoxDecoration(
-          // updated background gradient to #FEF7FF
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -194,7 +186,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // search section with rounded borders
+              //search section
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -227,7 +219,6 @@ class _AddDataScreenState extends State<AddDataScreen> {
                                 borderSide: BorderSide(color: brandColor, width: 2),
                               ),
                               labelStyle: TextStyle(color: Colors.grey.shade600),
-                              // removed the prefixIcon from here
                             ),
                           ),
                         ),
@@ -238,7 +229,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                             backgroundColor: brandColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 15),
-                            minimumSize: const Size(57, 57), // match TextField height
+                            minimumSize: const Size(57, 57),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -278,7 +269,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
               const SizedBox(height: 20),
 
-              // results section
+              //results card
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -307,11 +298,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _isSaving
-                          ? Center(
-
-                      )
-                          : Text(
+                      _isSaving ? Center() : Text(
                         _productInfo,
                         style: TextStyle(
                           fontSize: 16,

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class LogoWidget extends StatelessWidget {
   final double size;
 
-  const LogoWidget({Key? key, required this.size}) : super(key: key);
+  const LogoWidget({super.key, required this.size});
 
   @override
   Widget build(BuildContext context) {

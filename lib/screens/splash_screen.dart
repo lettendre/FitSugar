@@ -8,7 +8,7 @@ import 'package:fitsugar/screens/dashboard_screen.dart';
 import 'package:fitsugar/screens/no_wifi_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -21,21 +21,21 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Start loading after widget is built
+    //start loading after widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAuthAndNavigate();
     });
   }
 
-  // Check authentication and prepare navigation
+  //check authentication and prepare navigation
   Future<void> _checkAuthAndNavigate() async {
     final authService = Provider.of<AuthService>(context, listen: false);
     final connectivityService = Provider.of<ConnectivityService>(context, listen: false);
 
-    // Check connectivity first
+    //check connectivity
     await connectivityService.checkConnectivity();
 
-    // Wait for 2 seconds to show splash screen
+    //2 second wait for splash screen
     await Future.delayed(const Duration(seconds: 2));
 
     if (!connectivityService.isConnected) {
@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    // Get current user
+    //getter for current user
     try {
       final User? user = await authService.authStateChanges.first;
       setState(() {
@@ -64,13 +64,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Listen for connectivity changes
+    //recognise connectivity changes
     final connectivity = Provider.of<ConnectivityService>(context);
 
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 800),
       transitionBuilder: (Widget child, Animation<double> animation) {
-        // Create a fade transition
         return FadeTransition(
           opacity: animation,
           child: child,
@@ -84,11 +83,11 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  // Build the splash screen
+  //splash screen
   Widget _buildSplashScreen() {
     return Scaffold(
       key: const ValueKey<String>('splashScreen'),
-      backgroundColor: const Color(0xFFE83A5F),
+      backgroundColor: Colors.pink,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

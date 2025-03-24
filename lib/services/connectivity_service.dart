@@ -18,7 +18,7 @@ class ConnectivityService with ChangeNotifier {
     _initConnectivity();
   }
 
-  // Initialize connectivity and check initial state
+  //initialise connectivity and check initial state
   Future<void> _initConnectivity() async {
     try {
       List<ConnectivityResult> resultList = await _connectivity.checkConnectivity();
@@ -32,7 +32,7 @@ class ConnectivityService with ChangeNotifier {
     }
   }
 
-  // Update connection status based on connectivity result
+  //update connection status based on connectivity result
   void _updateConnectionStatus(List<ConnectivityResult> resultList) {
     _isConnected = resultList.isNotEmpty &&
         !resultList.contains(ConnectivityResult.none) &&
@@ -40,7 +40,7 @@ class ConnectivityService with ChangeNotifier {
     notifyListeners();
   }
 
-  // Check connectivity on demand
+  //check connectivity on demand
   Future<bool> checkConnectivity() async {
     List<ConnectivityResult> resultList = await _connectivity.checkConnectivity();
     _updateConnectionStatus(resultList);

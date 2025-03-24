@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoWifiScreen extends StatelessWidget {
-  const NoWifiScreen({Key? key}) : super(key: key);
+  const NoWifiScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class NoWifiScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             const Text(
-              'Please check your internet connection',
+              'Please check your internet connection and try again.',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,

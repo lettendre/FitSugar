@@ -11,7 +11,7 @@ class FoodEntry {
     required this.timestamp,
   });
 
-  // Create from JSON (from Firestore)
+  //create from json from database
   factory FoodEntry.fromJson(Map<String, dynamic> json) {
     return FoodEntry(
       id: json['id'],
@@ -23,7 +23,7 @@ class FoodEntry {
     );
   }
 
-  // Convert to JSON (for Firestore)
+  //convert to json to save into database
   Map<String, dynamic> toJson() {
     return {
       'id': id,

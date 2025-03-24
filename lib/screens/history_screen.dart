@@ -3,11 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:fitsugar/models/food_entry.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
 
-
 enum SortOption { dateNewest, dateOldest, sugarHighest, sugarLowest }
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({Key? key}) : super(key: key);
+  const HistoryScreen({super.key});
 
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
@@ -49,22 +48,22 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return entries;
   }
 
-  // Method to show delete confirmation dialog
+  //delete confirmation popup
   Future<bool> _confirmDelete(FoodEntry entry) async {
     return await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Delete'),
-          content: const Text('Are you sure you want to remove this entry?'),
+          content: const Text('Are you sure you want to delete this entry?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('CANCEL'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('DELETE'),
+              child: const Text('Delete'),
             ),
           ],
         );
@@ -82,8 +81,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Define the primary color to match login screen
-    final Color primaryColor = Color(0xFFE94262);
+    final Color primaryColor = Colors.pink;
+    final Color shadowColor = Colors.grey.withOpacity(0.2);
+    final Color cardBorderColor = Colors.grey.shade300;
+    final Color grey600 = Colors.grey.shade600;
+
 
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +93,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: Colors.black,
           ),
         ),
         actions: [
@@ -111,9 +113,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                   children: [
                     Icon(
                       Icons.arrow_downward,
-                      color: _currentSortOption == SortOption.dateNewest
-                          ? Colors.pink
-                          : Colors.grey,
+                      color: _currentSortOption == SortOption.dateNewest ? Colors.pink : Colors.grey,
                       size: 18,
                     ),
                     const SizedBox(width: 8),
@@ -181,8 +181,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
               children: [
-                Icon(Icons.sort, size: 16, color: Colors.grey[800]),
-                const SizedBox(width: 8),
                 Text(
                   'Sorted by: ${getSortOptionText(_currentSortOption)}',
                   style: TextStyle(
@@ -274,9 +272,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               border: Border.all(color: cardBorderColor),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 1,
-                                  blurRadius: 4,
+                                  color: shadowColor,
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
                                   offset: const Offset(0, 2),
                                 ),
                               ],
@@ -286,11 +284,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               child: ListTile(
                                 title: Text(
                                   entry.foodName,
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(
                                   dateFormat.format(entry.timestamp),
-                                  style: TextStyle(color: Colors.grey.shade600),
+                                  style: TextStyle(color: grey600),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -327,7 +325,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     },
                   );
                 } else {
-                  // When sorting by date, group by date
+                  //group by date when sorted by date
                   final Map<String, List<FoodEntry>> entriesByDate = {};
                   final dateFormat = DateFormat('MMM d, yyyy');
 
@@ -356,7 +354,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.pink.shade700,
+                                color: primaryColor,
                               ),
                             ),
                           ),
@@ -372,7 +370,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                   key: Key(entry.id),
                                   background: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.red,
+                                      color: grey600,
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     alignment: Alignment.centerRight,
@@ -393,9 +391,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       border: Border.all(color: cardBorderColor),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.grey.withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 4,
+                                          color: shadowColor,
+                                          spreadRadius: 2,
+                                          blurRadius: 5,
                                           offset: const Offset(0, 2),
                                         ),
                                       ],
@@ -405,11 +403,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                       child: ListTile(
                                         title: Text(
                                           entry.foodName,
-                                          style: const TextStyle(fontWeight: FontWeight.w500),
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                         subtitle: Text(
                                           'Added at ${DateFormat('h:mm a').format(entry.timestamp)}',
-                                          style: TextStyle(color: Colors.grey.shade600),
+                                          style: TextStyle(color: grey600),
                                         ),
                                         trailing: Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -458,7 +456,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     );
   }
 
-  // Helper method to determine color based on sugar amount
+  //determine color based on sugar amount
   Color _getSugarLevelColor(double sugarAmount) {
     if (sugarAmount <= 5) {
       return Colors.green;

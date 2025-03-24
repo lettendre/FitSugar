@@ -7,10 +7,10 @@ class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // Get current user ID (or return a guest ID if not logged in)
+  //get current user ID
   String get _userId => _auth.currentUser?.uid ?? 'guest-user';
 
-  // Enable offline persistence during initialization
+  //enable offline persistence during initialisation
   FirestoreService() {
     try {
       _db.settings = const Settings(
@@ -24,9 +24,9 @@ class FirestoreService {
     }
   }
 
-  // USER DATA METHODS
+  ///user data methods
 
-  // Get user data by UID
+  //get user data by UID
   Future<Map<String, dynamic>?> getUserData(String userId) async {
     try {
       DocumentSnapshot userDoc = await _db.collection('users').doc(userId).get();
@@ -42,7 +42,7 @@ class FirestoreService {
     }
   }
 
-  // Save user data
+  //save user data
   Future<bool> saveUserData(String userId, String name, String email) async {
     try {
       await _db.collection('users').doc(userId).set({
@@ -59,7 +59,7 @@ class FirestoreService {
     }
   }
 
-  // Update user data
+  //update user data
   Future<bool> updateUserData(String userId, String name, String email) async {
     try {
       await _db.collection('users').doc(userId).update({
@@ -75,35 +75,22 @@ class FirestoreService {
     }
   }
 
-  // Delete user data
-  Future<bool> deleteUserData(String userId) async {
-    try {
-      await _db.collection('users').doc(userId).delete();
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error deleting user data: $e');
-      }
-      return false;
-    }
-  }
+  ///food entry methods
 
-  // FOOD ENTRY METHODS
-
-  // Get reference to the user's food entries collection
+  //get reference to the user's food entries collection
   CollectionReference _getEntriesCollection(String userId) =>
       _db.collection('users').doc(userId).collection('food_entries');
 
-  // Add a new food entry
+  //add new food entry
   Future<bool> addFoodEntry(String foodName, double sugarAmount) async {
     try {
-      // Use the authenticated user's ID or fall back to guest
+      //use the authenticated user's ID
       String userId = _userId;
 
-      // Create a document reference with auto-generated ID
+      //create a document reference with auto generated ID
       final docRef = _getEntriesCollection(userId).doc();
 
-      // Create a new food entry
+      //create a new food entry
       final entry = FoodEntry(
         id: docRef.id,
         foodName: foodName,
@@ -111,7 +98,7 @@ class FirestoreService {
         timestamp: DateTime.now(),
       );
 
-      // Save to Firestore
+      //save to database
       await docRef.set(entry.toJson());
       return true;
     } catch (e) {
@@ -122,7 +109,7 @@ class FirestoreService {
     }
   }
 
-  // Get all food entries for the current user as a stream
+  //get all food entries for the current user as a stream
   Stream<List<FoodEntry>> getFoodEntries() {
     String userId = _userId;
 
@@ -139,12 +126,12 @@ class FirestoreService {
       if (kDebugMode) {
         print('Error getting food entries stream: $e');
       }
-      // Return an empty stream on error
+      //return an empty stream on error
       return Stream.value([]);
     }
   }
 
-  // Delete a food entry
+  //delete a food entry
   Future<bool> deleteFoodEntry(String entryId) async {
     try {
       String userId = _userId;
@@ -158,7 +145,7 @@ class FirestoreService {
     }
   }
 
-  // Get food entries as a Future (List) instead of Stream
+  //get food entries as a list instead of Stream
   Future<List<FoodEntry>> getFoodEntriesAsList() async {
     try {
       String userId = _userId;

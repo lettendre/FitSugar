@@ -3,17 +3,15 @@ import 'package:provider/provider.dart';
 import 'package:fitsugar/services/connectivity_service.dart';
 import 'package:fitsugar/screens/no_wifi_screen.dart';
 
-/// A widget that monitors connectivity and shows a No WiFi screen when offline.
-/// All app screens can be wrapped with this to handle connection status.
 class ConnectivityWrapper extends StatelessWidget {
   final Widget child;
   final bool showNoWifiOnDisconnect;
 
   const ConnectivityWrapper({
-    Key? key,
+    super.key,
     required this.child,
     this.showNoWifiOnDisconnect = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +26,7 @@ class ConnectivityWrapper extends StatelessWidget {
   }
 }
 
-/// Extension method to easily wrap any widget with ConnectivityWrapper
+///extension method to wrap any widget
 extension ConnectivityWrapperExtension on Widget {
   Widget withConnectivityHandler({bool showNoWifiOnDisconnect = true}) {
     return ConnectivityWrapper(

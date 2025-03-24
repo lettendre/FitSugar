@@ -20,7 +20,7 @@ void main() async {
     );
   } catch (e) {
     print('Firebase initialization error: $e');
-    // Continue app execution even if Firebase fails to initialize
+    //continue app execution even if firebase fails to initialise
   }
 
   runApp(
@@ -35,7 +35,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -87,15 +87,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Check for connectivity
+    //check for connectivity
     final connectivity = Provider.of<ConnectivityService>(context);
 
-    // If not connected, show the no wifi screen
+    //if not connected, show the no wifi screen
     if (!connectivity.isConnected) {
       return const NoWifiScreen();
     }
 
-    // Otherwise show the normal screen
+    //show opened screen
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(

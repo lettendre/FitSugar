@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fitsugar/services/auth_service.dart';
 import 'package:fitsugar/screens/dashboard_screen.dart';
-import 'package:fitsugar/widgets/logo_widget.dart';
 
 class SignupScreen extends StatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -69,6 +68,16 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final Color primaryColor = Colors.pink;
+    final Color lightColor = const Color(0xFFFEF7FF);
+    final Color textColor = Colors.black;
+    final Color cardBorderColor = Colors.grey.shade300;
+    final Color boxColor = Colors.white;
+    final Color shadowColor = Colors.grey.withOpacity(0.2);
+    final Color errorTextColor = Colors.grey.shade600;
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -100,12 +109,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   const SizedBox(height: 24),
 
-                  // First Name Field
                   const Text(
                     'First Name',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -113,20 +121,20 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFormField(
                     controller: _firstNameController,
                     decoration: InputDecoration(
-                      hintText: 'John',
+                      hintText: 'Kevin',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.grey),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     ),
@@ -145,7 +153,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     'Last Name',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -153,20 +161,20 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFormField(
                     controller: _lastNameController,
                     decoration: InputDecoration(
-                      hintText: 'Doe',
+                      hintText: 'Lettendre',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.grey),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     ),
@@ -177,15 +185,13 @@ class _SignupScreenState extends State<SignupScreen> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16),
 
-                  // Email Field
                   const Text(
                     'Email',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -194,20 +200,20 @@ class _SignupScreenState extends State<SignupScreen> {
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
-                      hintText: 'johndoe@email.com',
+                      hintText: 'kevinlettendre@email.com',
                       filled: true,
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.grey),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                     ),
@@ -215,6 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
                       }
+                      //email validation for form
                       if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
                         return 'Please enter a valid email';
                       }
@@ -224,12 +231,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   const SizedBox(height: 16),
 
-                  // Password Field
                   const Text(
                     'Password',
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
                   ),
@@ -243,15 +249,15 @@ class _SignupScreenState extends State<SignupScreen> {
                       fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.grey.shade300),
+                        borderSide: BorderSide(color: cardBorderColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.grey),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                       suffixIcon: IconButton(
@@ -270,8 +276,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a password';
                       }
-                      if (value.length < 8) {
-                        return 'Password must be at least 8 characters';
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
@@ -279,9 +285,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   const SizedBox(height: 8),
 
-                  // Password requirements
+                  //password requirements
                   const Text(
-                    'Password must be at least 8 characters and should include:',
+                    'Password must be at least 6 characters and should include:',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey,
@@ -295,11 +301,11 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   const SizedBox(height: 32),
 
-                  // Create Account Button
+                  //create account button
                   ElevatedButton(
                     onPressed: _isLoading ? null : _signUp,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFE94057),
+                      backgroundColor: primaryColor,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -314,7 +320,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                   const SizedBox(height: 24),
 
-                  // Terms and Conditions
+                  //terms and conditions - not implemented
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
@@ -323,14 +329,12 @@ class _SignupScreenState extends State<SignupScreen> {
                         const TextSpan(text: 'By creating an account, you agree to the '),
                         TextSpan(
                           text: 'privacy policy',
-                          style: const TextStyle(color: Color(0xFFE94057)),
-                          // Add your onTap handler for the privacy policy
+                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
                         ),
                         const TextSpan(text: ' and to the '),
                         TextSpan(
                           text: 'terms of use',
-                          style: const TextStyle(color: Color(0xFFE94057)),
-                          // Add your onTap handler for the terms of use
+                          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
                         ),
                         const TextSpan(text: '.'),
                       ],

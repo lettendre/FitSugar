@@ -7,17 +7,17 @@ class OpenFoodFactsService {
   final String apiUrl = 'https://world.openfoodfacts.org/api/v0/product/';
   final http.Client _client;
 
-  // Constructor that initializes the custom HTTP client
+  //constructor that initialises the custom HTTP client
   OpenFoodFactsService() : _client = _createClient();
 
-  // Create a client that bypasses certificate verification
+  //create a client that bypasses certificate verification
   static http.Client _createClient() {
     HttpClient httpClient = HttpClient()
       ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
     return IOClient(httpClient);
   }
 
-  // Function to fetch product details by barcode
+  //function to fetch product details by barcode
   Future<Map<String, dynamic>?> getProductDataByBarcode(String barcode) async {
     try {
       print('Fetching product with barcode: $barcode');
@@ -43,7 +43,7 @@ class OpenFoodFactsService {
     }
   }
 
-  // Function to search for product by name
+  //function to search for product by name
   Future<List<Map<String, dynamic>>> searchProductsByName(String name) async {
     try {
       // Properly encode the search term for URLs
@@ -76,6 +76,6 @@ class OpenFoodFactsService {
     }
   }
 
-  // Helper function to get the min of two values
+  //helper function to get the min of two values
   int min(int a, int b) => a < b ? a : b;
 }
