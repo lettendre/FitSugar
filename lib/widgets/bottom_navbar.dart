@@ -22,7 +22,7 @@ class BottomNavBar extends StatelessWidget {
       items: [
         BottomNavigationBarItem(
           icon: SvgPicture.asset(
-            'icons/solar_home_outline.svg',
+            'assets/icons/solar_home_outline.svg',
             width: 24,
             height: 24,
             color: currentIndex == 0 ? Colors.pink : Colors.black,
@@ -31,7 +31,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset(
-            'icons/solar_search_outline.svg',
+            'assets/icons/solar_search_outline.svg',
             width: 24,
             height: 24,
             color: currentIndex == 1 ? Colors.pink : Colors.black,
@@ -40,7 +40,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset(
-            'icons/solar_history_outline.svg',
+            'assets/icons/solar_history_outline.svg',
             width: 24,
             height: 24,
             color: currentIndex == 2 ? Colors.pink : Colors.black,
@@ -49,7 +49,7 @@ class BottomNavBar extends StatelessWidget {
         ),
         BottomNavigationBarItem(
           icon: SvgPicture.asset(
-            'icons/solar_user_outline.svg',
+            'assets/icons/solar_user_outline.svg',
             width: 24,
             height: 24,
             color: currentIndex == 3 ? Colors.pink : Colors.black,

@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Image.asset(
-          'logo.png',
+          'assets/logo.png',
           height: 40,
         ),
         centerTitle: true,

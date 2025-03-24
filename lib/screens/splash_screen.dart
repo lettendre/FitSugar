@@ -94,20 +94,10 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Image(
-              image: AssetImage('logo_white.png'),
+              image: AssetImage('assets/logo_white.png'),
               width: 80,
               height: 80,
             ),
-            // You can uncomment below if you want to show app name
-            // SizedBox(height: 16),
-            // Text(
-            //   'FitSugar',
-            //   style: TextStyle(
-            //     color: Colors.white,
-            //     fontSize: 24,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ],
         ),
       ),

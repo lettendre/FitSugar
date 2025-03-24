@@ -1,14 +1,27 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
 class OpenFoodFactsService {
   final String apiUrl = 'https://world.openfoodfacts.org/api/v0/product/';
+  final http.Client _client;
+
+  // Constructor that initializes the custom HTTP client
+  OpenFoodFactsService() : _client = _createClient();
+
+  // Create a client that bypasses certificate verification
+  static http.Client _createClient() {
+    HttpClient httpClient = HttpClient()
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return IOClient(httpClient);
+  }
 
   // Function to fetch product details by barcode
   Future<Map<String, dynamic>?> getProductDataByBarcode(String barcode) async {
     try {
       print('Fetching product with barcode: $barcode');
-      final response = await http.get(Uri.parse('$apiUrl$barcode.json'));
+      final response = await _client.get(Uri.parse('$apiUrl$barcode.json'));
 
       print('Barcode API response status: ${response.statusCode}');
 
@@ -40,8 +53,7 @@ class OpenFoodFactsService {
       print('Searching for products with name: $name');
       print('Search URL: $searchUrl');
 
-
-      final response = await http.get(Uri.parse(searchUrl));
+      final response = await _client.get(Uri.parse(searchUrl));
 
       print('Search API response status: ${response.statusCode}');
 

@@ -18,11 +18,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
   bool _isLoading = false;
   bool _isSaving = false;
 
-  // Store the found product for saving
+  // store the found product for saving
   String? _currentProductName;
   double? _currentSugarAmount;
 
-  // Function to search for product by name and auto-save
+  // function to search for product by name and auto-save
   void _searchProduct() async {
     final name = _searchController.text.trim();
     if (name.isEmpty) {
@@ -38,11 +38,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
     try {
       final products = await _foodFactsService.searchProductsByName(name);
       if (products.isNotEmpty) {
-        // Extract product name and sugar amount
+        // extract product name and sugar amount
         final productName = products[0]['product_name'] ?? 'Unknown Product';
         final sugarValue = products[0]['nutriments']?['sugars'];
 
-        // Parse sugar amount, handle different data types
+        // parse sugar amount, handle different data types
         double? sugarAmount;
         if (sugarValue is int) {
           sugarAmount = sugarValue.toDouble();
@@ -60,7 +60,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
           _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
         });
 
-        // Auto-save the product information
+        // auto-save the product information
         await _saveToHistory(productName, parsedSugarAmount);
       } else {
         setState(() {
@@ -78,7 +78,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
     }
   }
 
-  //Function to scan barcode and get product details
+  //function to scan barcode and get product details
   void _scanBarcode() async {
     setState(() {
       _isLoading = true;
@@ -92,11 +92,11 @@ class _AddDataScreenState extends State<AddDataScreen> {
         final productData = await _foodFactsService.getProductDataByBarcode(scanResult.rawContent);
 
         if (productData != null) {
-          // Extract product name and sugar amount
+          // extract product name and sugar amount
           final productName = productData['product_name'] ?? 'Unknown Product';
           final sugarValue = productData['nutriments']?['sugars'];
 
-          // Parse sugar amount, handle different data types
+          // parse sugar amount, handle different data types
           double? sugarAmount;
           if (sugarValue is int) {
             sugarAmount = sugarValue.toDouble();
@@ -114,7 +114,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
             _productInfo = 'Product: $productName\nSugar: ${parsedSugarAmount.toStringAsFixed(1)}g';
           });
 
-          // Auto-save the product information
+          // auto-save the product information
           await _saveToHistory(productName, parsedSugarAmount);
         } else {
           setState(() {
@@ -137,7 +137,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
     }
   }
 
-  // Save the product to history
+  // save the product to history
   Future<void> _saveToHistory(String productName, double sugarAmount) async {
     setState(() {
       _isSaving = true;
@@ -168,7 +168,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Brand color to match your splash screen
+    // brand color to match your splash screen
     final brandColor = const Color(0xFFE83A5F);
 
     return Scaffold(
@@ -180,7 +180,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
       // ),
       body: Container(
         decoration: BoxDecoration(
-          // Updated background gradient to #FEF7FF
+          // updated background gradient to #FEF7FF
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -194,7 +194,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Search section with rounded borders
+              // search section with rounded borders
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -227,7 +227,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                                 borderSide: BorderSide(color: brandColor, width: 2),
                               ),
                               labelStyle: TextStyle(color: Colors.grey.shade600),
-                              // Removed the prefixIcon from here
+                              // removed the prefixIcon from here
                             ),
                           ),
                         ),
@@ -238,7 +238,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
                             backgroundColor: brandColor,
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(horizontal: 15),
-                            minimumSize: const Size(57, 57), // Match TextField height
+                            minimumSize: const Size(57, 57), // match TextField height
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -278,7 +278,7 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
               const SizedBox(height: 20),
 
-              // Results section
+              // results section
               Expanded(
                 child: Container(
                   width: double.infinity,
