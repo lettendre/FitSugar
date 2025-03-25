@@ -1,20 +1,34 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart' show kIsWeb;
+import 'dart:io';
 import 'package:http/io_client.dart';
 
 class OpenFoodFactsService {
   final String apiUrl = 'https://world.openfoodfacts.org/api/v0/product/';
   final http.Client _client;
 
-  //constructor that initialises the custom HTTP client
+  //constructor to initialise the appropriate client based on platform
   OpenFoodFactsService() : _client = _createClient();
 
-  //create a client that bypasses certificate verification
+  //create a client appropriately for platform
   static http.Client _createClient() {
-    HttpClient httpClient = HttpClient()
-      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-    return IOClient(httpClient);
+    if (kIsWeb) {
+      //use standard client for web
+      return http.Client();
+    } else {
+      //use IOClient with certificate bypass for Android/iOS
+      try {
+        final httpClient = HttpClient()
+          ..badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
+        return IOClient(httpClient);
+      } catch (e) {
+        //error to standard client if IOClient fails
+        print('Error creating IOClient: $e');
+        return http.Client();
+      }
+    }
   }
 
   //function to fetch product details by barcode
@@ -76,6 +90,6 @@ class OpenFoodFactsService {
     }
   }
 
-  //helper function to get the min of two values
+  //get the min of two values
   int min(int a, int b) => a < b ? a : b;
 }

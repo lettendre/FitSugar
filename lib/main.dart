@@ -10,16 +10,25 @@ import 'package:fitsugar/screens/add_data_screen.dart';
 import 'package:fitsugar/screens/profile_screen.dart';
 import 'package:fitsugar/screens/no_wifi_screen.dart';
 import 'package:fitsugar/firebase_options.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    //web friendly initialisation approach
+    if (kIsWeb) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.web,
+      );
+    } else {
+      //otherwise, use current platform initialisation
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
   } catch (e) {
-    print('Firebase initialization error: $e');
+    print('Firebase initialisation error: $e');
     //continue app execution even if firebase fails to initialise
   }
 

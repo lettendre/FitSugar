@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:fitsugar/services/open_food_facts_service.dart';
 import 'package:fitsugar/services/FirestoreService.dart';
@@ -80,6 +81,14 @@ class _AddDataScreenState extends State<AddDataScreen> {
 
   //function to scan barcode and get product details
   void _scanBarcode() async {
+
+    if (kIsWeb) {
+      setState(() {
+        _productInfo = 'Barcode scanning is not available on web platform.';
+      });
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _currentProductName = null;
